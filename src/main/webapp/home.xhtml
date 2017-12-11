@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/WEB-INF/template/template.xhtml">
+	<ui:define name="title">
+		"El Mundo Nuevo"
+	</ui:define>
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data" id="postForm">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Nuevo post</h3>
+				</div>
+				<div class="panel-body">
+					<h:inputTextarea value="#{postMb.content}"
+						styleClass="form-control" id="postContent">
+					</h:inputTextarea>
+					<h:message for="postContent"></h:message>
+					<h:inputFile id="file" value="#{postMb.file}"/>
+					<h:message for="file"></h:message>
+					 
+					<h:commandLink styleClass="btn btn-primary"
+						action="#{postMb.submitPost}">
+			    		Publicar
+			    	<f:ajax render="@form :postList" event="click" execute="@form"></f:ajax>		
+					</h:commandLink>
+				</div>
+			</div>
+		</h:form>
+		<h:panelGroup layout="block" id="postList">
+			<ui:repeat var="post" value="#{postMb.postList}">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<img src="/image/#{post.user.userpic.path}" alt="M8"
+								class="rounded-circle" style="width: 90px; height: 90px;" />
+							<h:outputText value="#{post.user.name}" />
+							<h:form>
+								<h:commandLink styleClass="btn btn-info" action="#{likeMb.create(post)}" >Follow</h:commandLink>
+							</h:form>
+							<small> 
+							<h:outputText value="#{post.date}">
+									<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+								</h:outputText>
+							</small>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<h:outputText value="#{post.content}" />
+						<img src="/image/#{post.image.path}"/>
+						<div>
+						<h:form>
+							<h:commandLink styleClass="btn btn-success" action="#{likeMb.create(post)}" >Like</h:commandLink>
+						</h:form>
+						</div>
+						<ul class="list-group">
+							<ui:repeat var="comment" value="#{commentMb.listByPost(post)}">
+								<li class="list-group-item">
+									<strong>
+										<h:outputText value="#{comment.user.name}" />
+									</strong>
+									<small>
+										<h:outputText value="#{comment.date}" >
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+										</h:outputText>
+									</small>
+									<h:outputText value="#{comment.content}" />
+								</li>
+							</ui:repeat>
+							<h:form>
+								<h:inputText value="#{commentMb.comment}" styleClass="form-control" />
+								<h:commandLink styleClass="btn btn-primary" action="#{commentMb.create(post)}" >Comentar</h:commandLink>
+							</h:form>
+						</ul>
+					</div>
+				</div>
+			</ui:repeat>
+		</h:panelGroup>
+
+	</ui:define>
+</ui:composition>
+</html>

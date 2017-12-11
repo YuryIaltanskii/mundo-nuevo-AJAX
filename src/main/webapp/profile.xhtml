@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition template="/WEB-INF/template/template.xhtml">
+	<ui:define name="title">
+		Mi perfil
+	</ui:define>
+	<ui:define name="content">
+		<h:form enctype="multipart/form-data" id="postForm">
+			<div class="panel-heading">
+				<h3 class="panel-title">Perfil de usuario</h3>
+			</div>	
+			<div class="panel-body">
+				<div>
+					<label>Nombre de Usuario: </label>
+					<h:outputText value="#{authMb.user.name}"
+	                  rendered="#{authMb.logged}"/>
+				</div>
+				<div>
+					<label>Email: </label>
+					<h:outputText value="#{authMb.user.email}"
+	                  rendered="#{authMb.logged}"/>
+				</div>
+				<div>
+					<label>Foto de perfil: </label>
+					<img src="/image/#{authMb.user.userpic.path}"
+									class="rounded-circle" style="width: 90px; height: 90px;" />
+				</div>
+				<div>
+					<label>Cambiar foto</label>
+					<h:inputFile id="file" value="#{postMb.file}"/>
+						<h:message for="file"></h:message>
+				</div>
+				<div>
+					<h:link outcome="changePassword" value="Cambiar Contrasena"
+								rendered="#{authMb.logged}" />
+				</div>
+			</div>
+		</h:form>	
+	</ui:define>
+</ui:composition>
+</html>
